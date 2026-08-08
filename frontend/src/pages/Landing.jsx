@@ -19,7 +19,7 @@ export default function LandingPage() {
           Find your team. <span className="text-brand-600">Build your idea.</span> Prep with confidence.
         </h1>
         <p className="mt-4 max-w-xl text-base text-gray-600">
-          A college-restricted platform for SOA students to form compliant 6-member teams, discover
+          A platform for ITER students to form compliant 6-member teams, discover
           teammates by skill, and get ready for SIH 2026 — all in one place.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
