@@ -1,14 +1,13 @@
 const Mentor = require('../models/Mentor');
 const MentorRequest = require('../models/MentorRequest');
 const { sanitizeText } = require('../utils/sanitize');
+const { sendEmail } = require('../utils/email');
 
-// GET /api/mentors
 async function listMentors(req, res) {
   const mentors = await Mentor.find().sort({ name: 1 });
   res.json({ mentors });
 }
 
-// POST /api/mentors/:id/request
 async function requestMentorReview(req, res) {
   const user = req.user;
   const mentor = await Mentor.findById(req.params.id);
@@ -21,6 +20,18 @@ async function requestMentorReview(req, res) {
     teamId: user.teamId || null,
     message,
   });
+
+  if (mentor.email) {
+    await sendEmail({
+      to: mentor.email,
+      subject: `New mentor review request from ${user.name}`,
+      html: `<div style="font-family:sans-serif">
+        <h2>New review request</h2>
+        <p><b>${user.name}</b> (${user.email}) from <b>${user.college}</b> requested your feedback.</p>
+        <p><b>Message:</b> ${message || '(no message)'}</p>
+      </div>`,
+    });
+  }
 
   res.status(201).json({ request });
 }
